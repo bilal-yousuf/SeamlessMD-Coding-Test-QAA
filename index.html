@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>SeamlessMD Coding Test</title>
+	</head>
+	<body>
+		<h1>SeamlessMD Coding Test</h1>
+		<h2>Quality Assurance Associate Position</h2>
+		<h4>By Bilal Yousuf Mohammad</h4>
+		<br>
+		<!--Create div tags to populate via script below.-->
+		<div id="name"></div>
+		<div id="org"></div>
+		<div id="gender"></div>
+		<div id="numCond"></div>
+		<div id="conds"></div>
+
+		<script>
+			//Grab json file
+			fetch("patient_fixed.json")
+				.then(response => response.json())
+				// put data into data variable
+				.then(data => {
+					//Place json file in console output for reference
+					console.log(data)
+
+					//Populate variables to contain info assignment requres for simplicity's sake
+					var name = data.identifier[0].name[0].given[0] + ' ' + data.identifier[0].name[0].family[0];
+					var org = data.identifier[0].managingOrganization.display;
+					var gender = data.identifier[0].gender;
+					var numCond = data.identifier[0].conditions.length;
+					var conds = data.identifier[0].conditions
+					
+					//The "innterHTML" method I used caused problems with appending lists or including for
+					//loops. So as a quick and dirty workaround I looped through the conditions first and stored them 
+					//as the output I expected. This was the only point I wished I was using jQuery (a library designed
+					//SPECIFICALLY for this purpose)
+					var condsHTML = ""
+					for (var i=0; i<numCond; i++) {
+						condsHTML += '<p>-' + conds[i] + '</p>';
+					}
+
+
+					//Populate the aforementioned div tags with json data
+					document.querySelector("#name").innerHTML = '<p><strong>Name:</strong> ' + name + '</p>';
+					document.querySelector("#org").innerHTML = '<p><strong>Organization Name:</strong> ' + org + '</p>';
+					document.querySelector("#gender").innerHTML = '<p><strong>Gender:</strong> ' + gender + '</p>';
+					document.querySelector("#numCond").innerHTML = '<p><strong>Number of Conditions:</strong> ' + numCond + '</p>';
+					document.querySelector("#conds").innerHTML = '<p><strong>List of all conditions:</strong></p>' + condsHTML; 
+				})
+		</script>
+	</body>
+</html>
+
